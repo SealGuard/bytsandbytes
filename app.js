@@ -62,7 +62,7 @@
       summary:
         "InstaPreView gives your plan set a professional digital pre-review against the standards your local jurisdiction enforces — surfacing the comments, omissions, and code conflicts that send submittals back. Your first 10 findings are complimentary.",
       explainer:
-        "Upload a plan set and get an AI-assisted building-code pre-review tuned to the AHJ you actually submit to. InstaPreView screens for the issues plan reviewers cite most — egress, accessibility, fire ratings, zoning, energy, missing sheets, and local amendments — then returns a ranked findings list with severity and code citations so teams fix issues before formal review. Built for architects, designers, and engineers who need a fresh set of eyes before the real one.",
+        "InstaPreView gives your plan set a professional digital pre-review against the standards your local jurisdiction enforces — surfacing the comments, omissions, and code conflicts that send submittals back. Your first 10 findings are complimentary.\n\nUpload a plan set and get an AI-assisted building-code pre-review tuned to the AHJ you actually submit to. InstaPreView screens for the issues plan reviewers cite most — egress, accessibility, fire ratings, zoning, energy, missing sheets, and local amendments — then returns a ranked findings list with severity and code citations so teams fix issues before formal review.\n\nBuilt for architects, designers, and engineers who need a fresh set of eyes before the real one. No account to start. Results in minutes. Files kept private.",
       features: [
         "Jurisdiction-aware code pre-review",
         "Ranked findings with severity & citations",
@@ -513,6 +513,14 @@
     return `<div class="expand-shot">${mockShotHTML(prog)}${badge}</div>`;
   };
 
+  const formatParagraphs = (text) =>
+    String(text || "")
+      .split(/\n\n+/)
+      .map((p) => p.trim())
+      .filter(Boolean)
+      .map((p) => `<p>${escapeHTML(p)}</p>`)
+      .join("");
+
   const buildDetailHTML = (prog) => {
     const features = prog.features.map((f) => `<li>${escapeHTML(f)}</li>`).join("");
     const tech = prog.tech.map((t) => `<span>${escapeHTML(t)}</span>`).join("");
@@ -520,7 +528,7 @@
     const liveUrl = prog.liveUrl || (prog.url && prog.url.includes(".") ? `https://www.${prog.url}` : null);
     const liveBtn = liveUrl
       ? `<a class="btn-primary btn-live" href="${escapeHTML(liveUrl)}" target="_blank" rel="noopener noreferrer">
-           Visit ${escapeHTML(prog.title)} →
+           Visit Live Site →
          </a>`
       : "";
 
@@ -533,9 +541,7 @@
           <span class="detail-badge">${escapeHTML(prog.statusLabel)}</span>
           <p class="lead">${escapeHTML(prog.tagline)}</p>
           <h4>Overview</h4>
-          <p>${escapeHTML(prog.summary)}</p>
-          <h4 style="margin-top:1.15rem">How it works</h4>
-          <p>${escapeHTML(explainer)}</p>
+          <div class="expand-explainer">${formatParagraphs(explainer)}</div>
           <h4 style="margin-top:1.15rem">Capabilities</h4>
           <ul class="feature-list">${features}</ul>
           <h4>Stack</h4>
@@ -550,7 +556,7 @@
             <div class="demo-canvas" aria-hidden="true"></div>
             ${
               liveUrl
-                ? `<a class="demo-link" href="${escapeHTML(liveUrl)}" target="_blank" rel="noopener noreferrer">Open live demo on ${escapeHTML(prog.url || prog.title)}</a>`
+                ? `<a class="demo-link" href="${escapeHTML(liveUrl)}" target="_blank" rel="noopener noreferrer">Visit Live Site →</a>`
                 : ""
             }
           </div>
@@ -579,37 +585,46 @@
 
     paperHint?.classList.add("hidden");
 
-    // Selected paper slides toward center & straightens, then expands
+    // Phase 1: selected folio slides out & straightens; others dim
     $$(".paper", paperStack).forEach((el, index) => {
       if (el.dataset.id === id) {
         el.classList.add("active");
         el.style.zIndex = "90";
+        el.style.pointerEvents = "none";
         el.style.transition =
-          "transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease 0.2s, box-shadow 0.4s";
-        el.style.boxShadow = "0 40px 90px rgba(11,31,58,0.25)";
-        // Slide fully on-screen, rotate to straight
+          "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease 0.18s, box-shadow 0.35s";
+        el.style.boxShadow = "0 40px 90px rgba(11,31,58,0.22)";
+        // Slide fully into view, rotate to straight
         el.style.transform =
-          "translateY(-50%) translateX(calc(-55vw + 50%)) rotate(0deg) scale(1.02)";
-        el.style.opacity = "0";
+          "translateY(-50%) translateX(calc(-42vw + 10%)) rotate(0deg) scale(1.04)";
+        // Fade into expand panel
+        requestAnimationFrame(() => {
+          el.style.opacity = "0";
+        });
       } else {
         el.style.transition =
-          "opacity 0.4s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)";
-        el.style.opacity = "0.25";
+          "opacity 0.35s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+        el.style.opacity = "0.22";
         const t = stackTransforms(index, PROGRAMS.length);
         el.style.transform = t.transform;
       }
     });
 
+    // Prefill panel while paper animates
     detailInner.innerHTML = buildDetailHTML(prog);
+    // Reset scroll position of expand content
+    detailInner.scrollTop = 0;
+    if (paperExpandPanel) paperExpandPanel.scrollTop = 0;
 
+    // Phase 2: full-screen panel opens
     window.setTimeout(() => {
       if (activeId !== id) return;
       paperStack?.classList.add("dimmed");
       paperExpand?.classList.add("open");
       paperExpand?.setAttribute("aria-hidden", "false");
       document.body.classList.add("paper-open");
-      detailClose?.focus();
-    }, 320);
+      detailClose?.focus({ preventScroll: true });
+    }, 280);
   };
 
   const closePaper = () => {
@@ -624,8 +639,9 @@
       el.classList.remove("active");
       el.style.opacity = "1";
       el.style.boxShadow = "";
+      el.style.pointerEvents = "";
       el.style.transition =
-        "transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s, box-shadow 0.4s, border-color 0.3s";
+        "transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s, box-shadow 0.35s, border-color 0.3s";
       const t = stackTransforms(index, PROGRAMS.length);
       el.style.transform = t.transform;
       el.style.zIndex = String(t.zIndex);
