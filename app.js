@@ -73,7 +73,7 @@
       tech: ["React", "Vite", "API", "AI Review", "PDF"],
       accent: "#1c3a5e",
       image: "assets/instapreview.png",
-      screenshot: "assets/instapreview-screenshot.png",
+      screenshot: "assets/instapreview-screenshot.jpg",
       mockTheme: "mint",
     },
     {
