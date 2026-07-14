@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Byts & Bytes | Bespoke Software</title>
+  <meta name="description" content="Byts & Bytes — Bespoke Software Developer. We don't build software. We engineer futures." />
+  <link rel="icon" type="image/jpeg" href="assets/logo-256.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: { DEFAULT: '#0b1f3a', soft: '#1a3352' },
+            mute: { DEFAULT: '#5a7388', light: '#8ba3b8' },
+            cyan: {
+              glow: '#2dd4ff',
+              brand: '#00b4e6',
+              deep: '#0077a8',
+            },
+            paper: { DEFAULT: '#ffffff', soft: '#f7fafc' },
+          },
+          fontFamily: {
+            display: ['Orbitron', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-white text-ink font-sans antialiased overflow-x-hidden">
+  <div class="bg-ambient" aria-hidden="true"></div>
+  <canvas id="circuit-canvas" aria-hidden="true"></canvas>
+
+  <!-- Navigation -->
+  <header id="header" class="fixed top-0 inset-x-0 z-50">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 h-[72px] flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-3 group">
+        <img
+          src="assets/logo.jpg"
+          alt="Byts & Bytes"
+          class="h-11 w-11 rounded-lg object-cover ring-1 ring-cyan-brand/25 shadow-sm group-hover:ring-cyan-brand/50 transition"
+        />
+        <span class="hidden sm:flex flex-col leading-tight">
+          <span class="font-display text-sm font-semibold tracking-wide brand-name">
+            byts<span class="amp">&</span>Bytes
+          </span>
+          <span class="font-mono text-[10px] tracking-[0.18em] uppercase brand-tag">Bespoke Software</span>
+        </span>
+      </a>
+
+      <nav id="nav" class="nav-panel hidden md:flex items-center gap-8">
+        <a href="#capabilities" class="nav-link">Capabilities</a>
+        <a href="#portfolio" class="nav-link">Programs</a>
+        <a href="#process" class="nav-link">Protocol</a>
+        <a href="#contact" class="nav-cta">Initiate Contact</a>
+      </nav>
+
+      <button
+        id="nav-toggle"
+        class="md:hidden flex flex-col justify-center gap-[5px] w-10 h-10"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <span class="block w-5 h-0.5 transition-transform origin-center"></span>
+        <span class="block w-5 h-0.5 transition-opacity"></span>
+        <span class="block w-5 h-0.5 transition-transform origin-center"></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ═══════ HERO: seamless blended logo video ═══════ -->
+    <section id="hero" class="hero-section relative" aria-label="Hero">
+      <!-- Full-bleed video stage — soft fades into page, no card/box -->
+      <div class="logo-video-stage reveal">
+        <video
+          id="hero-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          webkit-playsinline
+          preload="auto"
+          poster="assets/logo-anim-poster.jpg"
+          aria-label="Byts and Bytes animated logo"
+        >
+          <source src="assets/logo-anim.mp4" type="video/mp4" />
+        </video>
+        <!-- Soft white fades (edges dissolve into background) -->
+        <div class="video-blend video-blend-top" aria-hidden="true"></div>
+        <div class="video-blend video-blend-bottom" aria-hidden="true"></div>
+        <div class="video-blend video-blend-left" aria-hidden="true"></div>
+        <div class="video-blend video-blend-right" aria-hidden="true"></div>
+        <div class="video-blend video-blend-radial" aria-hidden="true"></div>
+      </div>
+
+      <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
+        <div class="hero-copy text-center -mt-6 sm:-mt-10 pb-12 sm:pb-16">
+          <p class="reveal font-mono text-[11px] tracking-[0.22em] uppercase text-cyan-deep mb-4">
+            Bespoke Software Developer
+          </p>
+          <h1 class="reveal font-display font-bold leading-[1.15] tracking-tight max-w-4xl mx-auto">
+            <span class="block text-ink text-[clamp(1.6rem,4.4vw,2.9rem)]">
+              We don't build software.
+            </span>
+            <span class="block mt-2 text-[clamp(1.7rem,4.8vw,3.15rem)] hero-accent">
+              We engineer futures.
+            </span>
+          </h1>
+          <p class="reveal mt-6 text-base sm:text-lg text-mute max-w-2xl mx-auto leading-relaxed">
+            Bespoke software for your industry — beautiful, intuitive, and built for exceptional ROI.
+          </p>
+          <div class="reveal mt-9 flex flex-wrap items-center justify-center gap-3">
+            <a href="#capabilities" class="btn-primary">
+              View Capabilities
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#contact" class="btn-ghost">Brief a Mission</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ BESPOKE CAPABILITIES ═══════ -->
+    <section id="capabilities" class="relative py-20 sm:py-28 px-5 sm:px-8 bg-paper-soft/80">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal section-label">
+          <span class="num">01</span>
+          <span class="h-px w-8 bg-cyan-brand/40"></span>
+          <span>Bespoke Capabilities</span>
+        </div>
+        <h2 class="reveal font-display text-2xl sm:text-4xl font-bold text-ink tracking-tight max-w-2xl mb-4">
+          What we engineer for you
+        </h2>
+        <p class="reveal text-mute max-w-2xl mb-12 text-base sm:text-lg">
+          Purpose-built systems — not off-the-shelf shells. Each capability is designed from your
+          constraints, shipped with operational edges, and built to compound value.
+        </p>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="reveal service-card">
+            <div class="service-num">01</div>
+            <h3 class="font-display text-sm tracking-widest uppercase text-ink mb-3">Command Centers</h3>
+            <p class="text-sm text-mute leading-relaxed mb-5">
+              Multi-entity operations, procurement, tasking, and executive visibility on one sealed surface.
+            </p>
+            <ul class="space-y-2 font-mono text-[11px] tracking-wide text-ink-soft/80">
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Realtime dashboards</li>
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Role-gated workflows</li>
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Audit-ready trails</li>
+            </ul>
+          </article>
+
+          <article class="reveal service-card">
+            <div class="service-num">02</div>
+            <h3 class="font-display text-sm tracking-widest uppercase text-ink mb-3">Compliance Engines</h3>
+            <p class="text-sm text-mute leading-relaxed mb-5">
+              Verification, licensing, and evidence systems for regulated environments that cannot guess.
+            </p>
+            <ul class="space-y-2 font-mono text-[11px] tracking-wide text-ink-soft/80">
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Identity & seals</li>
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Document integrity</li>
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Enforcement hooks</li>
+            </ul>
+          </article>
+
+          <article class="reveal service-card">
+            <div class="service-num">03</div>
+            <h3 class="font-display text-sm tracking-widest uppercase text-ink mb-3">Domain Intelligence</h3>
+            <p class="text-sm text-mute leading-relaxed mb-5">
+              AI-assisted platforms that understand your industry — plans, permits, logistics — not chat toys.
+            </p>
+            <ul class="space-y-2 font-mono text-[11px] tracking-wide text-ink-soft/80">
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Custom model routing</li>
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Structured extraction</li>
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Operator copilots</li>
+            </ul>
+          </article>
+
+          <article class="reveal service-card">
+            <div class="service-num">04</div>
+            <h3 class="font-display text-sm tracking-widest uppercase text-ink mb-3">Bespoke Platforms</h3>
+            <p class="text-sm text-mute leading-relaxed mb-5">
+              Greenfield systems when off-the-shelf becomes the bottleneck. Designed, shipped, owned.
+            </p>
+            <ul class="space-y-2 font-mono text-[11px] tracking-wide text-ink-soft/80">
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Product architecture</li>
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Full-stack delivery</li>
+              <li class="flex gap-2"><span class="text-cyan-brand">▸</span> Long-horizon support</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ PAPER PORTFOLIO ═══════ -->
+    <section id="portfolio" class="relative py-20 sm:py-28 overflow-hidden">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <div class="reveal section-label">
+          <span class="num">02</span>
+          <span class="h-px w-8 bg-cyan-brand/40"></span>
+          <span>Program Archive</span>
+        </div>
+        <div class="reveal max-w-xl mb-6 sm:mb-8">
+          <h2 class="font-display text-2xl sm:text-4xl font-bold text-ink tracking-tight mb-3">
+            The Paper Stack
+          </h2>
+          <p class="text-mute text-base sm:text-lg">
+            Folios fan across the archive — most of each card is visible. Click one to slide it free,
+            straighten, and explore the full program.
+          </p>
+        </div>
+      </div>
+
+      <div class="paper-stage reveal" id="paper-stage">
+        <div class="paper-hint" id="paper-hint">
+          <span class="hint-icon">←</span>
+          Click any folio to expand
+        </div>
+        <div class="paper-stack" id="paper-stack" role="list"></div>
+      </div>
+    </section>
+
+    <!-- Full-screen paper expand (outside section flow for true fullscreen) -->
+    <div class="paper-expand" id="paper-expand" aria-hidden="true">
+      <div class="paper-expand-backdrop" id="paper-expand-backdrop"></div>
+      <div class="paper-expand-panel" id="paper-expand-panel" role="dialog" aria-modal="true" aria-labelledby="expand-title">
+        <button class="detail-close" id="detail-close" aria-label="Close folio">
+          <span>Close</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="detail-inner" id="detail-inner"></div>
+      </div>
+    </div>
+
+    <!-- ═══════ PROTOCOL ═══════ -->
+    <section id="process" class="relative py-20 sm:py-28 px-5 sm:px-8 bg-paper-soft/80">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal section-label">
+          <span class="num">03</span>
+          <span class="h-px w-8 bg-cyan-brand/40"></span>
+          <span>Protocol</span>
+        </div>
+        <h2 class="reveal font-display text-2xl sm:text-4xl font-bold text-ink tracking-tight mb-14">
+          How futures get built
+        </h2>
+
+        <div class="process-track grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
+          <div class="reveal process-step text-center lg:text-left">
+            <div class="step-node mx-auto lg:mx-0">01</div>
+            <h3 class="font-display text-sm tracking-widest uppercase text-ink mt-5 mb-2">Signal</h3>
+            <p class="text-sm text-mute leading-relaxed">We capture the real constraint — not the feature list.</p>
+          </div>
+          <div class="reveal process-step text-center lg:text-left">
+            <div class="step-node mx-auto lg:mx-0">02</div>
+            <h3 class="font-display text-sm tracking-widest uppercase text-ink mt-5 mb-2">Blueprint</h3>
+            <p class="text-sm text-mute leading-relaxed">Architecture first. Interfaces operators will trust.</p>
+          </div>
+          <div class="reveal process-step text-center lg:text-left">
+            <div class="step-node mx-auto lg:mx-0">03</div>
+            <h3 class="font-display text-sm tracking-widest uppercase text-ink mt-5 mb-2">Forge</h3>
+            <p class="text-sm text-mute leading-relaxed">Ship in tight cycles. Instrument everything. Hard edges only.</p>
+          </div>
+          <div class="reveal process-step text-center lg:text-left">
+            <div class="step-node mx-auto lg:mx-0">04</div>
+            <h3 class="font-display text-sm tracking-widest uppercase text-ink mt-5 mb-2">Orbit</h3>
+            <p class="text-sm text-mute leading-relaxed">Handoff with runbooks, monitoring, and a path to evolve.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ CTA ═══════ -->
+    <section class="relative py-16 sm:py-24 px-5 sm:px-8">
+      <div class="mx-auto max-w-5xl">
+        <div class="reveal cta-banner relative overflow-hidden rounded-3xl px-8 py-14 sm:px-14 sm:py-16 text-center">
+          <div class="cta-glow" aria-hidden="true"></div>
+          <p class="relative font-mono text-[11px] tracking-[0.25em] uppercase text-cyan-deep mb-4">
+            Commission Open
+          </p>
+          <h2 class="relative font-display text-2xl sm:text-4xl md:text-5xl font-bold text-ink leading-tight mb-5">
+            Your next system shouldn't<br class="hidden sm:block" />
+            <span class="hero-accent">feel like software.</span>
+          </h2>
+          <p class="relative text-mute max-w-xl mx-auto mb-9 text-base sm:text-lg">
+            Tell us what breaks under pressure. We'll tell you what to build —
+            and whether we should build it together.
+          </p>
+          <div class="relative flex flex-wrap items-center justify-center gap-3">
+            <a href="mailto:hello@bytsandbytes.com?subject=Mission%20Brief%20—%20Byts%20%26%20Bytes" class="btn-primary text-base px-8 py-4">
+              Transmit Signal
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </a>
+            <a href="#portfolio" class="btn-ghost text-base px-8 py-4">View Programs</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ CONTACT ═══════ -->
+    <section id="contact" class="relative py-20 sm:py-28 px-5 sm:px-8 bg-paper-soft/80">
+      <div class="mx-auto max-w-2xl">
+        <div class="reveal contact-card relative overflow-hidden rounded-3xl p-8 sm:p-10">
+          <div class="contact-glow" aria-hidden="true"></div>
+          <div class="relative section-label mb-4">
+            <span class="num">04</span>
+            <span class="h-px w-8 bg-cyan-brand/40"></span>
+            <span>Contact</span>
+          </div>
+          <h2 class="relative font-display text-2xl sm:text-3xl font-bold text-ink mb-3">
+            Ready to engineer<br /><span class="text-cyan-deep">what's next?</span>
+          </h2>
+          <p class="relative text-mute mb-8 max-w-md">
+            Direct line to the studio. No ticket queues. No black-box agencies.
+          </p>
+
+          <form id="contact-form" class="relative space-y-5" novalidate>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <label class="block">
+                <span class="font-mono text-[10px] tracking-[0.16em] uppercase text-mute mb-1.5 block">Name</span>
+                <input type="text" name="name" required autocomplete="name" placeholder="Your name" class="form-input" />
+              </label>
+              <label class="block">
+                <span class="font-mono text-[10px] tracking-[0.16em] uppercase text-mute mb-1.5 block">Email</span>
+                <input type="email" name="email" required autocomplete="email" placeholder="you@company.com" class="form-input" />
+              </label>
+            </div>
+            <label class="block">
+              <span class="font-mono text-[10px] tracking-[0.16em] uppercase text-mute mb-1.5 block">Mission brief</span>
+              <textarea name="message" rows="4" required placeholder="What future are we engineering?" class="form-input resize-y min-h-[120px]"></textarea>
+            </label>
+            <button type="submit" class="btn-primary w-full py-3.5">
+              <span>Send to hello@bytsandbytes.com</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+            <p id="form-status" class="font-mono text-sm text-center text-cyan-deep min-h-[1.25em]" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="relative mt-6 pt-6 border-t border-cyan-brand/15 text-center">
+            <a href="mailto:hello@bytsandbytes.com" class="font-mono text-sm tracking-wide text-mute hover:text-cyan-deep transition">
+              hello@bytsandbytes.com
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer relative z-10 py-10 px-5 sm:px-8">
+    <div class="mx-auto max-w-7xl flex flex-col items-center gap-4 text-center">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo-256.jpg" alt="" class="h-10 w-10 rounded-lg object-cover ring-1 ring-cyan-brand/25" />
+        <div class="text-left">
+          <p class="font-display text-sm font-semibold text-ink tracking-wide">Byts &amp; Bytes</p>
+          <p class="font-mono text-[10px] tracking-[0.14em] uppercase text-mute">Bespoke Software Developer</p>
+        </div>
+      </div>
+      <p class="text-sm text-mute italic">We don't build software. We engineer futures.</p>
+      <p class="font-mono text-[11px] tracking-wide text-mute-light">
+        © <span id="year"></span> Byts &amp; Bytes LLC · All systems reserved
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
