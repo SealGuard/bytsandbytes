@@ -53,23 +53,27 @@
     {
       id: "instapreview",
       code: "BB-03 · INSTAPREVIEW",
-      title: "InstaPreview",
+      title: "InstaPreView",
       url: "instapreview.co",
-      tagline: "Architecture intelligence that turns plans into decisions.",
+      liveUrl: "https://www.instapreview.co",
+      tagline: "Know what they'll flag — before you submit.",
       status: "live",
-      statusLabel: "In Orbit",
+      statusLabel: "Live Product",
       summary:
-        "InstaPreview bridges design intent and operational reality — scanning, reporting, and stakeholder loops purpose-built for architecture and construction velocity.",
+        "InstaPreView gives your plan set a professional digital pre-review against the standards your local jurisdiction enforces — surfacing the comments, omissions, and code conflicts that send submittals back. Your first 10 findings are complimentary.",
+      explainer:
+        "Upload a plan set and get an AI-assisted building-code pre-review tuned to the AHJ you actually submit to. InstaPreView screens for the issues plan reviewers cite most — egress, accessibility, fire ratings, zoning, energy, missing sheets, and local amendments — then returns a ranked findings list with severity and code citations so teams fix issues before formal review. Built for architects, designers, and engineers who need a fresh set of eyes before the real one.",
       features: [
-        "Plan-aware intelligence pipelines",
-        "Sponsor and lifecycle reporting",
-        "Commission and analytics surfaces",
-        "Scan gates with second-opinion review",
-        "Operator-facing web experience",
+        "Jurisdiction-aware code pre-review",
+        "Ranked findings with severity & citations",
+        "Egress, ADA, fire, zoning & energy checks",
+        "First 10 findings free on every scan",
+        "Results in minutes · shareable PDF export",
       ],
-      tech: ["React", "Vite", "API", "Analytics", "Email"],
-      accent: "#00a8d4",
+      tech: ["React", "Vite", "API", "AI Review", "PDF"],
+      accent: "#1c3a5e",
       image: "assets/instapreview.png",
+      screenshot: "assets/instapreview-screenshot.png",
       mockTheme: "mint",
     },
     {
@@ -485,49 +489,76 @@
   `;
 
   const paperThumbHTML = (prog) => {
-    if (prog.image) {
-      return `<div class="paper-thumb"><img src="${escapeHTML(prog.image)}" alt="${escapeHTML(prog.title)} preview" /></div>`;
+    const src = prog.screenshot || prog.image;
+    if (src) {
+      return `<div class="paper-thumb"><img src="${escapeHTML(src)}" alt="${escapeHTML(prog.title)} preview" /></div>`;
     }
     return `<div class="paper-thumb"><div class="paper-thumb-mock"><div class="bar"></div><div class="row"><div class="cell"></div><div class="cell"></div></div><div class="row"><div class="cell"></div><div class="cell"></div></div></div></div>`;
+  };
+
+  const expandShotHTML = (prog) => {
+    const shot = prog.screenshot;
+    const badge = prog.image
+      ? `<div class="expand-logo-badge"><img src="${escapeHTML(prog.image)}" alt="" /><strong>${escapeHTML(prog.title)}</strong></div>`
+      : `<div class="expand-logo-badge"><strong>${escapeHTML(prog.title)}</strong></div>`;
+
+    if (shot) {
+      return `
+        <div class="expand-shot has-photo">
+          <img src="${escapeHTML(shot)}" alt="${escapeHTML(prog.title)} product screenshot" />
+          ${badge}
+        </div>
+      `;
+    }
+    return `<div class="expand-shot">${mockShotHTML(prog)}${badge}</div>`;
   };
 
   const buildDetailHTML = (prog) => {
     const features = prog.features.map((f) => `<li>${escapeHTML(f)}</li>`).join("");
     const tech = prog.tech.map((t) => `<span>${escapeHTML(t)}</span>`).join("");
-    const badge = prog.image
-      ? `<div class="expand-logo-badge"><img src="${escapeHTML(prog.image)}" alt="" /><strong>${escapeHTML(prog.title)}</strong></div>`
-      : `<div class="expand-logo-badge"><strong>${escapeHTML(prog.title)}</strong></div>`;
+    const explainer = prog.explainer || prog.summary;
+    const liveUrl = prog.liveUrl || (prog.url && prog.url.includes(".") ? `https://www.${prog.url}` : null);
+    const liveBtn = liveUrl
+      ? `<a class="btn-primary btn-live" href="${escapeHTML(liveUrl)}" target="_blank" rel="noopener noreferrer">
+           Visit ${escapeHTML(prog.title)} →
+         </a>`
+      : "";
 
     return `
-      <div class="expand-shot">
-        ${mockShotHTML(prog)}
-        ${badge}
-      </div>
+      ${expandShotHTML(prog)}
       <div class="expand-body">
-        <div>
+        <div class="expand-copy">
           <div class="detail-code">${escapeHTML(prog.code)}${prog.url ? ` · ${escapeHTML(prog.url)}` : ""}</div>
           <h3 id="expand-title">${escapeHTML(prog.title)}</h3>
           <span class="detail-badge">${escapeHTML(prog.statusLabel)}</span>
           <p class="lead">${escapeHTML(prog.tagline)}</p>
           <h4>Overview</h4>
           <p>${escapeHTML(prog.summary)}</p>
-          <h4 style="margin-top:1.1rem">Capabilities</h4>
+          <h4 style="margin-top:1.15rem">How it works</h4>
+          <p>${escapeHTML(explainer)}</p>
+          <h4 style="margin-top:1.15rem">Capabilities</h4>
           <ul class="feature-list">${features}</ul>
           <h4>Stack</h4>
           <div class="tech-pills">${tech}</div>
         </div>
-        <div>
+        <div class="expand-side">
           <div class="demo-panel">
             <header>
-              <span>Live surface</span>
-              <em>Demo placeholder</em>
+              <span>Interactive demo</span>
+              <em>${liveUrl ? "Live product online" : "Placeholder"}</em>
             </header>
             <div class="demo-canvas" aria-hidden="true"></div>
+            ${
+              liveUrl
+                ? `<a class="demo-link" href="${escapeHTML(liveUrl)}" target="_blank" rel="noopener noreferrer">Open live demo on ${escapeHTML(prog.url || prog.title)}</a>`
+                : ""
+            }
           </div>
         </div>
         <div class="detail-cta">
-          <button type="button" class="btn-primary" data-contact-intent="message" data-program-id="${escapeHTML(prog.id)}">
-            Send me a message about this
+          ${liveBtn}
+          <button type="button" class="btn-ghost" data-contact-intent="message" data-program-id="${escapeHTML(prog.id)}">
+            Message me about this
           </button>
           <button type="button" class="btn-ghost" data-contact-intent="build" data-program-id="${escapeHTML(prog.id)}">
             Build me something like this
