@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our work | Byts &amp; Bytes</title>
+  <meta name="description" content="Programs by Byts &amp; Bytes: Insta platform software for architecture, engineering and construction, client websites, and internal tools." />
+  <link rel="icon" type="image/jpeg" href="assets/logo-256.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: { DEFAULT: '#0b1f3a', soft: '#1a3352' },
+            mute: { DEFAULT: '#5a7388', light: '#5a7388' },
+            cyan: {
+              glow: '#2dd4ff',
+              brand: '#00b4e6',
+              deep: '#0077a8',
+            },
+            paper: { DEFAULT: '#ffffff', soft: '#f7fafc' },
+          },
+          fontFamily: {
+            display: ['Comfortaa', 'system-ui', 'sans-serif'],
+            sans: ['Comfortaa', 'system-ui', 'sans-serif'],
+            mono: ['Comfortaa', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="work-page bg-white text-ink font-sans antialiased overflow-x-hidden">
+  <div class="bg-ambient" aria-hidden="true"></div>
+  <canvas id="circuit-canvas" aria-hidden="true"></canvas>
+
+  <header id="header" class="fixed top-0 inset-x-0 z-50">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 h-[72px] flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 group">
+        <img
+          src="assets/logo.jpg"
+          alt="Byts &amp; Bytes"
+          class="h-11 w-11 rounded-lg object-cover ring-1 ring-cyan-brand/25 shadow-sm group-hover:ring-cyan-brand/50 transition"
+        />
+        <span class="hidden sm:flex flex-col leading-tight">
+          <span class="font-display text-sm font-semibold brand-name">
+            byts<span class="amp">&amp;</span>Bytes
+          </span>
+          <span class="font-sans text-[11px] font-medium brand-tag">Bespoke Software</span>
+        </span>
+      </a>
+
+      <nav id="nav" class="nav-panel hidden md:flex items-center gap-8" aria-label="Primary">
+        <a href="/#capabilities" class="nav-link">Capabilities</a>
+        <a href="/work" class="nav-link" aria-current="page">Our work</a>
+        <a href="/#process" class="nav-link">Protocol</a>
+        <a href="/#contact" class="nav-cta">Initiate Contact</a>
+      </nav>
+
+      <button
+        id="nav-toggle"
+        class="md:hidden flex flex-col items-center justify-center"
+        aria-label="Toggle menu"
+        aria-controls="nav"
+        aria-expanded="false"
+      >
+        <span class="block w-5 h-0.5 transition-transform origin-center"></span>
+        <span class="block w-5 h-0.5 transition-opacity"></span>
+        <span class="block w-5 h-0.5 transition-transform origin-center"></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="px-5 sm:px-8 pb-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="section-label">
+          <span class="num">02</span>
+          <span class="h-px w-8 bg-cyan-brand/40"></span>
+          <span>Archive</span>
+        </div>
+        <div class="work-intro">
+          <h1 class="font-display text-[clamp(1.7rem,4vw,2.8rem)] font-bold text-ink mb-4">Our work</h1>
+          <p class="text-mute text-base sm:text-lg">
+            Every program, grouped by what it is. Live work links to the public site.
+            Private builds, internal tools, and work still in progress do not.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="px-5 sm:px-8">
+      <div class="mx-auto max-w-7xl" id="work-catalog"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer relative z-10 py-10 px-5 sm:px-8 mt-16">
+    <div class="mx-auto max-w-7xl flex flex-col items-center gap-4 text-center">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo-256.jpg" alt="" class="h-10 w-10 rounded-lg object-cover ring-1 ring-cyan-brand/25" />
+        <div class="text-left">
+          <p class="font-display text-sm font-semibold text-ink">Byts &amp; Bytes</p>
+          <p class="text-xs font-medium text-mute">Bespoke Software Developer</p>
+        </div>
+      </div>
+      <p class="text-sm text-mute italic">We don't build software. We engineer futures.</p>
+      <p class="text-xs text-mute">
+        © <span id="year"></span> Byts &amp; Bytes LLC · All systems reserved
+      </p>
+    </div>
+  </footer>
+
+  <script src="programs.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
