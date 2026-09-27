@@ -1,0 +1,14 @@
+{
+  "name": "byts-and-bytes",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "htmlhint index.html work.html && eslint app.js programs.js",
+    "lint:html": "htmlhint index.html work.html",
+    "lint:js": "eslint app.js programs.js"
+  },
+  "devDependencies": {
+    "eslint": "^9.36.0",
+    "htmlhint": "^1.6.3"
+  }
+}

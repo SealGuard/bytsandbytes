@@ -5,122 +5,7 @@
 (() => {
   "use strict";
 
-  const PROGRAMS = [
-    {
-      id: "kraken",
-      code: "BB-01 · KRAKEN",
-      title: "Kraken",
-      url: "kraken",
-      tagline: "Multi-company command center for operators who run empires, not spreadsheets.",
-      status: "live",
-      statusLabel: "Live System",
-      summary:
-        "Kraken is the operational nucleus for multi-entity businesses — companies, purchase orders, tasking, Gmail-linked workflows, and executive dashboards fused into one sealed command surface.",
-      features: [
-        "Company switcher with full CRUD and governance",
-        "Purchase orders with PDF preview and sent history",
-        "Kanban tasking across To Do / Doing / Done",
-        "Executive overview with realtime signal density",
-        "Gmail connect for operational communication loops",
-      ],
-      tech: ["Next.js", "Supabase", "Zustand", "Auth", "PDF"],
-      accent: "#00b4e6",
-      image: "assets/kraken.png",
-      mockTheme: "ocean",
-    },
-    {
-      id: "instacrm",
-      code: "BB-02 · INSTACRM",
-      title: "InstaCRM",
-      url: "instacrm",
-      tagline: "Relationship intelligence for teams that outgrow generic CRM theater.",
-      status: "live",
-      statusLabel: "Live System",
-      summary:
-        "InstaCRM is a bespoke customer relationship layer — pipeline clarity, stakeholder maps, and follow-through designed around how your operators actually sell and deliver.",
-      features: [
-        "Pipeline boards tuned to real deal stages",
-        "Contact & company graphs with context",
-        "Task and follow-up loops that stick",
-        "Lightweight reporting without bloat",
-        "Integrations where they earn their keep",
-      ],
-      tech: ["React", "API", "Auth", "Realtime"],
-      accent: "#0090c8",
-      image: null,
-      mockTheme: "slate",
-    },
-    {
-      id: "instapreview",
-      code: "BB-03 · INSTAPREVIEW",
-      title: "InstaPreView",
-      url: "instapreview.co",
-      liveUrl: "https://www.instapreview.co",
-      tagline: "Know what they'll flag — before you submit.",
-      status: "live",
-      statusLabel: "Live Product",
-      summary:
-        "InstaPreView gives your plan set a professional digital pre-review against the standards your local jurisdiction enforces — surfacing the comments, omissions, and code conflicts that send submittals back. Your first 10 findings are complimentary.",
-      explainer:
-        "InstaPreView gives your plan set a professional digital pre-review against the standards your local jurisdiction enforces — surfacing the comments, omissions, and code conflicts that send submittals back. Your first 10 findings are complimentary.\n\nUpload a plan set and get an AI-assisted building-code pre-review tuned to the AHJ you actually submit to. InstaPreView screens for the issues plan reviewers cite most — egress, accessibility, fire ratings, zoning, energy, missing sheets, and local amendments — then returns a ranked findings list with severity and code citations so teams fix issues before formal review.\n\nBuilt for architects, designers, and engineers who need a fresh set of eyes before the real one. No account to start. Results in minutes. Files kept private.",
-      features: [
-        "Jurisdiction-aware code pre-review",
-        "Ranked findings with severity & citations",
-        "Egress, ADA, fire, zoning & energy checks",
-        "First 10 findings free on every scan",
-        "Results in minutes · shareable PDF export",
-      ],
-      tech: ["React", "Vite", "API", "AI Review", "PDF"],
-      accent: "#1c3a5e",
-      image: "assets/instapreview.png",
-      screenshot: "assets/instapreview-screenshot.jpg",
-      mockTheme: "mint",
-    },
-    {
-      id: "sealguard",
-      code: "BB-04 · SEALGUARD",
-      title: "SealGuard",
-      url: "sealguard.co",
-      tagline: "Document integrity and professional seal verification for regulated work.",
-      status: "live",
-      statusLabel: "Deployed",
-      summary:
-        "SealGuard protects the chain of trust around professional seals, licensing evidence, and verification trails — so compliance is enforced, not assumed.",
-      features: [
-        "Seal verification workflows with audit trails",
-        "Firm identity and licensing governance",
-        "Evidence PDF generation and notice systems",
-        "Registry and status surfaces for operators",
-        "Webhook-ready enforcement hooks",
-      ],
-      tech: ["Python", "FastAPI", "Auth", "PDF", "Security"],
-      accent: "#0077a8",
-      image: "assets/sealguard.png",
-      mockTheme: "navy",
-    },
-    {
-      id: "forge",
-      code: "BB-05 · FORGE",
-      title: "The Forge",
-      url: "custom",
-      tagline: "Bespoke platforms when commodity tools become the bottleneck.",
-      status: "open",
-      statusLabel: "Commission Open",
-      summary:
-        "The Forge is how futures get built from zero — custom platforms, AI-assisted domain systems, and long-horizon products designed around your actual constraints.",
-      features: [
-        "First-principles product architecture",
-        "Full-stack delivery with hard operational edges",
-        "AI routing tuned to your domain, not generic chat",
-        "Runbooks, monitoring, and evolution paths",
-        "Partnership model — not a ticket queue",
-      ],
-      tech: ["Custom Stack", "AI Systems", "Cloud", "Ops"],
-      accent: "#2dd4ff",
-      image: "assets/logo.jpg",
-      mockTheme: "forge",
-    },
-  ];
+  const PROGRAMS = window.PROGRAMS || [];
 
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -128,13 +13,6 @@
   const header = $("#header");
   const nav = $("#nav");
   const navToggle = $("#nav-toggle");
-  const paperStack = $("#paper-stack");
-  const paperExpand = $("#paper-expand");
-  const paperExpandBackdrop = $("#paper-expand-backdrop");
-  const paperExpandPanel = $("#paper-expand-panel");
-  const detailInner = $("#detail-inner");
-  const detailClose = $("#detail-close");
-  const paperHint = $("#paper-hint");
   const form = $("#contact-form");
   const formStatus = $("#form-status");
   const yearEl = $("#year");
@@ -405,7 +283,7 @@
         }
       }
 
-      raf = requestAnimationFrame(draw);
+      if (!reduced) raf = requestAnimationFrame(draw);
     };
 
     window.addEventListener("resize", resize);
@@ -413,46 +291,18 @@
     raf = requestAnimationFrame(draw);
 
     document.addEventListener("visibilitychange", () => {
+      if (reduced) return;
       if (document.hidden) cancelAnimationFrame(raf);
       else raf = requestAnimationFrame(draw);
     });
   }
 
-  /* ─── Paper portfolio ─── */
-  let activeId = null;
-
-  /**
-   * Spread angled stack across the stage:
-   * ~30–35% off-screen (≈65–70% of each folio visible), slight overlap.
-   */
-  const stackTransforms = (index, total, hoverIndex = null) => {
-    const mid = (total - 1) / 2;
-    const offset = index - mid;
-    // Off-screen amount of paper width (lower = more visible)
-    let peekX = 32; // ~68% of card still on-screen
-    // Spread farther across the page
-    const stackY = offset * 72;
-    const stackX = offset * 92 + index * 10;
-    const rot = -10 + index * 3.2 + offset * 0.8;
-    let lift = 0;
-    let pull = 0;
-    let liftRot = 0;
-    let scale = 1;
-
-    if (hoverIndex !== null && hoverIndex === index && activeId === null) {
-      peekX = 22; // pull further into view
-      lift = -14;
-      pull = -36;
-      liftRot = -1.5;
-      scale = 1.03;
-    }
-
-    return {
-      // Anchored right-center; translateX peeks a slice off-screen
-      transform: `translateY(calc(-50% + ${stackY + lift}px)) translateX(calc(${peekX}% + ${stackX + pull}px)) rotate(${rot + liftRot}deg) scale(${scale})`,
-      zIndex: 10 + index,
-    };
-  };
+  /* ─── Our work cards ─── */
+  const GROUPS = [
+    "Insta platform products",
+    "Marketplaces & client websites",
+    "Internal tools & operations",
+  ];
 
   const escapeHTML = (str) =>
     String(str)
@@ -461,321 +311,70 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
 
-  const applyStackHover = (hoverIndex) => {
-    $$(".paper", paperStack).forEach((el, index) => {
-      const t = stackTransforms(index, PROGRAMS.length, hoverIndex);
-      el.style.transform = t.transform;
-      el.style.zIndex = String(hoverIndex === index ? 80 : t.zIndex);
-    });
+  const statusClass = (status) => {
+    if (status === "Live") return "is-live";
+    if (status === "In progress") return "is-progress";
+    return "is-quiet";
   };
 
-  const mockShotHTML = (prog) => `
-    <div class="expand-shot-mock" data-theme="${escapeHTML(prog.mockTheme || "ocean")}">
-      <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-      <div class="mock-nav">
-        <span style="width:18%"></span>
-        <span style="width:12%;opacity:.6"></span>
-        <span style="width:10%;opacity:.5"></span>
-        <span style="width:14%;opacity:.55;margin-left:auto"></span>
-      </div>
-      <div class="mock-body">
-        <div class="mock-side"></div>
-        <div class="mock-main">
-          <div class="mock-kpis"><div class="kpi"></div><div class="kpi"></div><div class="kpi"></div></div>
-          <div class="mock-chart"></div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  const paperThumbHTML = (prog) => {
-    const src = prog.screenshot || prog.image;
-    if (src) {
-      return `<div class="paper-thumb"><img src="${escapeHTML(src)}" alt="${escapeHTML(prog.title)} preview" /></div>`;
+  const glyphFor = (category) => {
+    if (category === "Insta platform products") {
+      return '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="7" y="9" width="34" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 18h34M16 18v21" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>';
     }
-    return `<div class="paper-thumb"><div class="paper-thumb-mock"><div class="bar"></div><div class="row"><div class="cell"></div><div class="cell"></div></div><div class="row"><div class="cell"></div><div class="cell"></div></div></div></div>`;
-  };
-
-  const expandShotHTML = (prog) => {
-    const shot = prog.screenshot;
-    const badge = prog.image
-      ? `<div class="expand-logo-badge"><img src="${escapeHTML(prog.image)}" alt="" /><strong>${escapeHTML(prog.title)}</strong></div>`
-      : `<div class="expand-logo-badge"><strong>${escapeHTML(prog.title)}</strong></div>`;
-
-    if (shot) {
-      return `
-        <div class="expand-shot has-photo">
-          <img src="${escapeHTML(shot)}" alt="${escapeHTML(prog.title)} product screenshot" />
-          ${badge}
-        </div>
-      `;
+    if (category === "Marketplaces & client websites") {
+      return '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="14" cy="24" r="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="34" cy="15" r="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="34" cy="33" r="5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M19 22.5 29 17M19 25.5 29 31" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>';
     }
-    return `<div class="expand-shot">${mockShotHTML(prog)}${badge}</div>`;
+    return '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 7 39 16v16L24 41 9 32V16z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M24 24v17M24 24 9 16M24 24l15-8" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>';
   };
 
-  const formatParagraphs = (text) =>
-    String(text || "")
-      .split(/\n\n+/)
-      .map((p) => p.trim())
-      .filter(Boolean)
-      .map((p) => `<p>${escapeHTML(p)}</p>`)
-      .join("");
-
-  const buildDetailHTML = (prog) => {
-    const features = prog.features.map((f) => `<li>${escapeHTML(f)}</li>`).join("");
-    const tech = prog.tech.map((t) => `<span>${escapeHTML(t)}</span>`).join("");
-    const explainer = prog.explainer || prog.summary;
-    const liveUrl = prog.liveUrl || (prog.url && prog.url.includes(".") ? `https://www.${prog.url}` : null);
-    const liveBtn = liveUrl
-      ? `<a class="btn-primary btn-live" href="${escapeHTML(liveUrl)}" target="_blank" rel="noopener noreferrer">
-           Visit Live Site →
-         </a>`
+  const programCard = (prog) => {
+    const media = prog.image
+      ? `<img src="${escapeHTML(prog.image)}" alt="${escapeHTML(prog.imageAlt || prog.name)}" />`
+      : `<div class="work-type">
+          <div class="work-glyph">${glyphFor(prog.category)}</div>
+          <p class="work-type-name">${escapeHTML(prog.name)}</p>
+        </div>`;
+    const visit = prog.url
+      ? `<a class="work-visit" href="${escapeHTML(prog.url)}" target="_blank" rel="noopener noreferrer" aria-label="Visit ${escapeHTML(prog.name)} (opens in a new tab)">Visit site</a>`
       : "";
-
-    return `
-      ${expandShotHTML(prog)}
-      <div class="expand-body">
-        <div class="expand-copy">
-          <div class="detail-code">${escapeHTML(prog.code)}${prog.url ? ` · ${escapeHTML(prog.url)}` : ""}</div>
-          <h3 id="expand-title">${escapeHTML(prog.title)}</h3>
-          <span class="detail-badge">${escapeHTML(prog.statusLabel)}</span>
-          <p class="lead">${escapeHTML(prog.tagline)}</p>
-          <h4>Overview</h4>
-          <div class="expand-explainer">${formatParagraphs(explainer)}</div>
-          <h4 style="margin-top:1.15rem">Capabilities</h4>
-          <ul class="feature-list">${features}</ul>
-          <h4>Stack</h4>
-          <div class="tech-pills">${tech}</div>
-        </div>
-        <div class="expand-side">
-          <div class="demo-panel">
-            <header>
-              <span>Interactive demo</span>
-              <em>${liveUrl ? "Live product online" : "Placeholder"}</em>
-            </header>
-            <div class="demo-canvas" aria-hidden="true"></div>
-            ${
-              liveUrl
-                ? `<a class="demo-link" href="${escapeHTML(liveUrl)}" target="_blank" rel="noopener noreferrer">Visit Live Site →</a>`
-                : ""
-            }
-          </div>
-        </div>
-        <div class="detail-cta">
-          ${liveBtn}
-          <button type="button" class="btn-ghost" data-contact-intent="message" data-program-id="${escapeHTML(prog.id)}">
-            Message me about this
-          </button>
-          <button type="button" class="btn-ghost" data-contact-intent="build" data-program-id="${escapeHTML(prog.id)}">
-            Build me something like this
-          </button>
+    return `<article class="work-card">
+      <div class="work-media">${media}</div>
+      <div class="work-body">
+        <p class="work-cat">${escapeHTML(prog.category)}</p>
+        <h3>${escapeHTML(prog.name)}</h3>
+        <p class="work-pitch">${escapeHTML(prog.pitch)}</p>
+        <div class="work-foot">
+          <span class="work-status ${statusClass(prog.status)}">${escapeHTML(prog.status)}</span>
+          ${visit}
         </div>
       </div>
-    `;
+    </article>`;
   };
 
-  const openPaper = (id) => {
-    if (activeId === id) {
-      closePaper();
-      return;
-    }
-    const prog = PROGRAMS.find((p) => p.id === id);
-    if (!prog) return;
-    activeId = id;
+  const workGrid = $("#work-grid");
+  if (workGrid) {
+    workGrid.innerHTML = PROGRAMS.filter((prog) => prog.featured).map(programCard).join("");
+  }
 
-    paperHint?.classList.add("hidden");
-
-    // Phase 1: selected folio slides out & straightens; others dim
-    $$(".paper", paperStack).forEach((el, index) => {
-      if (el.dataset.id === id) {
-        el.classList.add("active");
-        el.style.zIndex = "90";
-        el.style.pointerEvents = "none";
-        el.style.transition =
-          "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease 0.18s, box-shadow 0.35s";
-        el.style.boxShadow = "0 40px 90px rgba(11,31,58,0.22)";
-        // Slide fully into view, rotate to straight
-        el.style.transform =
-          "translateY(-50%) translateX(calc(-42vw + 10%)) rotate(0deg) scale(1.04)";
-        // Fade into expand panel
-        requestAnimationFrame(() => {
-          el.style.opacity = "0";
-        });
-      } else {
-        el.style.transition =
-          "opacity 0.35s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
-        el.style.opacity = "0.22";
-        const t = stackTransforms(index, PROGRAMS.length);
-        el.style.transform = t.transform;
-      }
-    });
-
-    // Prefill panel while paper animates
-    detailInner.innerHTML = buildDetailHTML(prog);
-    // Reset scroll position of expand content
-    detailInner.scrollTop = 0;
-    if (paperExpandPanel) paperExpandPanel.scrollTop = 0;
-
-    // Phase 2: full-screen panel opens
-    window.setTimeout(() => {
-      if (activeId !== id) return;
-      paperStack?.classList.add("dimmed");
-      paperExpand?.classList.add("open");
-      paperExpand?.setAttribute("aria-hidden", "false");
-      document.body.classList.add("paper-open");
-      detailClose?.focus({ preventScroll: true });
-    }, 280);
-  };
-
-  const closePaper = () => {
-    activeId = null;
-    paperExpand?.classList.remove("open");
-    paperExpand?.setAttribute("aria-hidden", "true");
-    paperStack?.classList.remove("dimmed");
-    paperHint?.classList.remove("hidden");
-    document.body.classList.remove("paper-open");
-
-    $$(".paper", paperStack).forEach((el, index) => {
-      el.classList.remove("active");
-      el.style.opacity = "1";
-      el.style.boxShadow = "";
-      el.style.pointerEvents = "";
-      el.style.transition =
-        "transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s, box-shadow 0.35s, border-color 0.3s";
-      const t = stackTransforms(index, PROGRAMS.length);
-      el.style.transform = t.transform;
-      el.style.zIndex = String(t.zIndex);
-    });
-  };
-
-  /** Prefill contact form for a program + intent, then scroll to contact */
-  const openContactForProgram = (programId, intent) => {
-    const prog = PROGRAMS.find((p) => p.id === programId);
-    if (!prog || !form) return;
-
-    closePaper();
-
-    const messageField = form.querySelector('[name="message"]');
-
-    let message = "";
-    if (intent === "build") {
-      message =
-        `I'd like you to build something like ${prog.title}` +
-        (prog.url && prog.url !== "custom" ? ` (${prog.url})` : "") +
-        `.\n\n` +
-        `What I'm aiming for:\n` +
-        `• Inspired by: ${prog.tagline}\n` +
-        `• Context: [tell us about your workflow]\n` +
-        `• Timeline / constraints: [optional]`;
-    } else {
-      message =
-        `I'd like to learn more about ${prog.title}` +
-        (prog.url && prog.url !== "custom" ? ` (${prog.url})` : "") +
-        `.\n\n` +
-        `${prog.tagline}\n\n` +
-        `My questions:\n` +
-        `• \n` +
-        `• `;
-    }
-
-    if (messageField) {
-      messageField.value = message;
-      messageField.dispatchEvent(new Event("input", { bubbles: true }));
-    }
-
-    // Highlight contact card briefly
-    const contactSection = $("#contact");
-    window.setTimeout(() => {
-      contactSection?.scrollIntoView({ behavior: "smooth", block: "start" });
-      form.classList.add("contact-prefilled");
-      messageField?.focus();
-      if (formStatus) {
-        formStatus.textContent =
-          intent === "build"
-            ? `Prefilling for a build inspired by ${prog.title}…`
-            : `Prefilling a message about ${prog.title}…`;
-      }
-      window.setTimeout(() => form.classList.remove("contact-prefilled"), 2400);
-    }, 280);
-  };
-
-  const renderStack = () => {
-    if (!paperStack) return;
-    paperStack.innerHTML = "";
-
-    PROGRAMS.forEach((prog, index) => {
-      const el = document.createElement("article");
-      el.className = "paper";
-      el.dataset.id = prog.id;
-      el.dataset.index = String(index);
-      el.setAttribute("role", "listitem");
-      el.setAttribute("tabindex", "0");
-      el.setAttribute("aria-label", `Open ${prog.title} folio`);
-
-      const statusClass = prog.status === "live" || prog.status === "open" ? "live" : "";
-
-      el.innerHTML = `
-        <div class="paper-spine" style="background: linear-gradient(180deg, ${prog.accent}, #006a8a)"></div>
-        <div class="paper-content">
-          ${paperThumbHTML(prog)}
-          <div class="paper-code">${escapeHTML(prog.code)}</div>
-          <h3 class="paper-title">${escapeHTML(prog.title)}</h3>
-          <p class="paper-tagline">${escapeHTML(prog.tagline)}</p>
-          <div class="paper-footer">
-            <span class="paper-status ${statusClass}">${escapeHTML(prog.statusLabel)}</span>
-            <span class="paper-action">Slide free →</span>
-          </div>
-        </div>
-      `;
-
-      const t = stackTransforms(index, PROGRAMS.length);
-      el.style.transform = t.transform;
-      el.style.zIndex = String(t.zIndex);
-
-      el.addEventListener("mouseenter", () => {
-        if (activeId) return;
-        applyStackHover(index);
-      });
-      el.addEventListener("mouseleave", () => {
-        if (activeId) return;
-        applyStackHover(null);
-      });
-      el.addEventListener("click", () => openPaper(prog.id));
-      el.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          openPaper(prog.id);
-        }
-      });
-
-      paperStack.appendChild(el);
-    });
-  };
-
-  detailClose?.addEventListener("click", closePaper);
-  paperExpandBackdrop?.addEventListener("click", closePaper);
-
-  paperExpand?.addEventListener("click", (e) => {
-    const btn = e.target.closest?.("[data-contact-intent]");
-    if (!btn) return;
-    const intent = btn.getAttribute("data-contact-intent");
-    const programId = btn.getAttribute("data-program-id");
-    if (intent && programId) openContactForProgram(programId, intent);
-  });
+  const workCatalog = $("#work-catalog");
+  if (workCatalog) {
+    workCatalog.innerHTML = GROUPS.map((group) => {
+      const id = group.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      const cards = PROGRAMS.filter((prog) => prog.category === group).map(programCard).join("");
+      return `<section class="work-group" aria-labelledby="${id}">
+        <h2 id="${id}">${escapeHTML(group)}</h2>
+        <div class="work-grid">${cards}</div>
+      </section>`;
+    }).join("");
+  }
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && activeId) closePaper();
+    if (e.key !== "Escape" || !nav?.classList.contains("open")) return;
+    nav.classList.remove("open");
+    navToggle?.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+    navToggle?.focus();
   });
-
-  let resizeTimer;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      if (!activeId) applyStackHover(null);
-    }, 120);
-  });
-
-  renderStack();
 
   /* Contact form → mailto:hello@bytsandbytes.com */
   form?.addEventListener("submit", (e) => {
